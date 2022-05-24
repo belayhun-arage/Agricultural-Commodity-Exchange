@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/home/belay/go/src/github.com/belayhun-arage/agri-net/agri_net_frontend/build/flutter_plugin_android_lifecycle/intermediates/res/merged/debug/drawable/notification_tile_bg.xml",
+        "source": "/home/belay/.gradle/caches/transforms-2/files-2.1/c1ebda589683e9beaa06b540aac78854/core-1.6.0/res/drawable/notification_tile_bg.xml"
+    },
+    {
+        "merged": "/home/belay/go/src/github.com/belayhun-arage/agri-net/agri_net_frontend/build/flutter_plugin_android_lifecycle/intermediates/res/merged/debug/drawable/notification_bg.xml",
+        "source": "/home/belay/.gradle/caches/transforms-2/files-2.1/c1ebda589683e9beaa06b540aac78854/core-1.6.0/res/drawable/notification_bg.xml"
+    },
+    {
+        "merged": "/home/belay/go/src/github.com/belayhun-arage/agri-net/agri_net_frontend/build/flutter_plugin_android_lifecycle/intermediates/res/merged/debug/drawable/notification_bg_low.xml",
+        "source": "/home/belay/.gradle/caches/transforms-2/files-2.1/c1ebda589683e9beaa06b540aac78854/core-1.6.0/res/drawable/notification_bg_low.xml"
+    },
+    {
+        "merged": "/home/belay/go/src/github.com/belayhun-arage/agri-net/agri_net_frontend/build/flutter_plugin_android_lifecycle/intermediates/res/merged/debug/drawable/notification_icon_background.xml",
+        "source": "/home/belay/.gradle/caches/transforms-2/files-2.1/c1ebda589683e9beaa06b540aac78854/core-1.6.0/res/drawable/notification_icon_background.xml"
+    }
+]

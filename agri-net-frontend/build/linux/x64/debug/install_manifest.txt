@@ -1,0 +1,11 @@
+/home/belay/go/src/github.com/belayhun-arage/agri-net/agri_net_frontend/build/linux/x64/debug/bundle/agri_net_frontend
+/home/belay/go/src/github.com/belayhun-arage/agri-net/agri_net_frontend/build/linux/x64/debug/bundle/data/icudtl.dat
+/home/belay/go/src/github.com/belayhun-arage/agri-net/agri_net_frontend/build/linux/x64/debug/bundle/lib/libflutter_linux_gtk.so
+/home/belay/go/src/github.com/belayhun-arage/agri-net/agri_net_frontend/build/linux/x64/debug/bundle/data/flutter_assets/AssetManifest.json
+/home/belay/go/src/github.com/belayhun-arage/agri-net/agri_net_frontend/build/linux/x64/debug/bundle/data/flutter_assets/NOTICES.Z
+/home/belay/go/src/github.com/belayhun-arage/agri-net/agri_net_frontend/build/linux/x64/debug/bundle/data/flutter_assets/NOTICES
+/home/belay/go/src/github.com/belayhun-arage/agri-net/agri_net_frontend/build/linux/x64/debug/bundle/data/flutter_assets/version.json
+/home/belay/go/src/github.com/belayhun-arage/agri-net/agri_net_frontend/build/linux/x64/debug/bundle/data/flutter_assets/fonts/MaterialIcons-Regular.otf
+/home/belay/go/src/github.com/belayhun-arage/agri-net/agri_net_frontend/build/linux/x64/debug/bundle/data/flutter_assets/FontManifest.json
+/home/belay/go/src/github.com/belayhun-arage/agri-net/agri_net_frontend/build/linux/x64/debug/bundle/data/flutter_assets/kernel_blob.bin
+/home/belay/go/src/github.com/belayhun-arage/agri-net/agri_net_frontend/build/linux/x64/debug/bundle/data/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf

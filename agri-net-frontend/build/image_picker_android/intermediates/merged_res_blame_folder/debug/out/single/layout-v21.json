@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/home/belay/go/src/github.com/belayhun-arage/agri-net/agri_net_frontend/build/image_picker_android/intermediates/res/merged/debug/layout-v21/notification_action.xml",
+        "source": "/home/belay/.gradle/caches/transforms-2/files-2.1/c1ebda589683e9beaa06b540aac78854/core-1.6.0/res/layout-v21/notification_action.xml"
+    },
+    {
+        "merged": "/home/belay/go/src/github.com/belayhun-arage/agri-net/agri_net_frontend/build/image_picker_android/intermediates/res/merged/debug/layout-v21/notification_template_custom_big.xml",
+        "source": "/home/belay/.gradle/caches/transforms-2/files-2.1/c1ebda589683e9beaa06b540aac78854/core-1.6.0/res/layout-v21/notification_template_custom_big.xml"
+    },
+    {
+        "merged": "/home/belay/go/src/github.com/belayhun-arage/agri-net/agri_net_frontend/build/image_picker_android/intermediates/res/merged/debug/layout-v21/notification_action_tombstone.xml",
+        "source": "/home/belay/.gradle/caches/transforms-2/files-2.1/c1ebda589683e9beaa06b540aac78854/core-1.6.0/res/layout-v21/notification_action_tombstone.xml"
+    },
+    {
+        "merged": "/home/belay/go/src/github.com/belayhun-arage/agri-net/agri_net_frontend/build/image_picker_android/intermediates/res/merged/debug/layout-v21/notification_template_icon_group.xml",
+        "source": "/home/belay/.gradle/caches/transforms-2/files-2.1/c1ebda589683e9beaa06b540aac78854/core-1.6.0/res/layout-v21/notification_template_icon_group.xml"
+    }
+]
