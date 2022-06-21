@@ -1,0 +1,57 @@
+enum TRANSACTION_STATES {
+  UNKNOWN,
+  TS_CREATED,
+  TS_AMENDMENT_REQUESTED,
+  TS_AMENDED,
+  TS_KEBD_REQUESTED,
+  TS_KEBD_REQUEST_AMENDMENT_REQUEST_SENT,
+  TS_KEBD_AMENDED,
+  TS_GUARANTEE_AMOUNT_REQUEST_SENT,
+  TS_GUARANTEE_AMOUNT_AMEND_REQUEST_SENT,
+  TS_GUARANTEE_AMOUNT_AMENDED,
+  TS_SELLER_ACCEPTED,
+  TS_BUYER_ACCEPTED,
+  TS_ACCEPTED,
+  TS_DECLINED,
+  TS_PAYMENT_INSTANTIATED,
+  TS_SELLER_PAYMENT_COMPLETED,
+  TS_BUYER_PAYMENT_COMPLETED,
+  TS_ERROR,
+  TS_CONTRACT_CREATED,
+  TS_CONTRACT_CREATED_ACTIVATED,
+  TS_CONTRACT_FAILED,
+  TS_CONTRACT_SUCCEED,
+}
+
+Map<int , String> transaction_states_name = {
+  TRANSACTION_STATES.UNKNOWN.index: "unknown state",
+  TRANSACTION_STATES.TS_CREATED.index: "Transaction created",
+  TRANSACTION_STATES.TS_AMENDMENT_REQUESTED.index:
+      "Transaction Amendment Requested",
+  TRANSACTION_STATES.TS_AMENDED.index: "Transaction Amended",
+  TRANSACTION_STATES.TS_KEBD_REQUESTED.index: "Transaction kebd requested",
+  TRANSACTION_STATES.TS_KEBD_REQUEST_AMENDMENT_REQUEST_SENT.index:
+      "Transaction kebd amendment requested",
+  TRANSACTION_STATES.TS_KEBD_AMENDED.index: "Transaction kebd amended",
+  TRANSACTION_STATES.TS_GUARANTEE_AMOUNT_REQUEST_SENT.index:
+      "Transaction gurantee amount requested",
+  TRANSACTION_STATES.TS_GUARANTEE_AMOUNT_AMEND_REQUEST_SENT.index:
+      "Transaction guarantee ameount amendment requested",
+  TRANSACTION_STATES.TS_GUARANTEE_AMOUNT_AMENDED.index:
+      "Transaction gurantee amount amended",
+  TRANSACTION_STATES.TS_SELLER_ACCEPTED.index: "Transaction accepted by seller",
+  TRANSACTION_STATES.TS_BUYER_ACCEPTED.index: "Transaction accepted by buyer",
+  TRANSACTION_STATES.TS_ACCEPTED.index: "Transaction accepted",
+  TRANSACTION_STATES.TS_DECLINED.index: "Transaction declined",
+  TRANSACTION_STATES.TS_PAYMENT_INSTANTIATED.index:
+      "Transaction payment instantiated",
+  TRANSACTION_STATES.TS_SELLER_PAYMENT_COMPLETED.index:
+      "Transaction  seller completed payment",
+  TRANSACTION_STATES.TS_BUYER_PAYMENT_COMPLETED.index:
+      "Transaction buyer completed the payment",
+  TRANSACTION_STATES.TS_ERROR.index: "Transaction error",
+  TRANSACTION_STATES.TS_CONTRACT_CREATED.index: "Contract created",
+  TRANSACTION_STATES.TS_CONTRACT_CREATED_ACTIVATED.index: "Contract activated",
+  TRANSACTION_STATES.TS_CONTRACT_FAILED.index: "Contract failed",
+  TRANSACTION_STATES.TS_CONTRACT_SUCCEED.index: "Contract succeed",
+};

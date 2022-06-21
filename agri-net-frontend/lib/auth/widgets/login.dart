@@ -1,5 +1,3 @@
-import 'package:agri_net_frontend/home/screens/screens.dart';
-
 import "../../libs.dart";
 
 class LoginWidget extends StatefulWidget {
@@ -43,11 +41,11 @@ class _LoginWidgetState extends State<LoginWidget> {
           ),
         ),
         Container(
-          child: BlocBuilder<AuthBloc, AuthBlocState>(
+          child: BlocBuilder<UserBloc, UserState>(
             builder: (contexts, state) {
-              if (state is AuthAdminLoggedIn) {
+              if (state is Authenticated) {
                 return Text(
-                  " succesfuly logged in ",
+                  "",
                   style: TextStyle(
                     color: Colors.green,
                     fontWeight: FontWeight.bold,
@@ -55,22 +53,28 @@ class _LoginWidgetState extends State<LoginWidget> {
                     // fontSize: 18
                   ),
                 );
-              } else if (state is AuthAdminLoginNotSuccesful) {
-                return Text(
-                  " ${state.Msg} ",
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: "Elegant TypeWriter",
-                    // fontSize: 18,
+              } else if (state is NotAuthenticated) {
+                return Container(
+                  // width: 40,
+                  height: 40,
+                  child: Text(
+                    " ${state.Msg} ",
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "Elegant TypeWriter",
+                      // fontSize: 18,
+                    ),
                   ),
                 );
-              } else if (state is AuthAdminLoginOnProgress) {
+              } else if (state is UserLoginOnProgressState) {
                 return Container(
-                  width: 20,
-                  height: 20,
+                  width: 40,
+                  height: 40,
                   child: CircularProgressIndicator(
-                      color: Theme.of(context).primaryColor),
+                    color: Theme.of(context).primaryColor,
+                    strokeWidth: 3,
+                  ),
                 );
               }
               return Text(
@@ -93,13 +97,13 @@ class _LoginWidgetState extends State<LoginWidget> {
             cursorColor: Theme.of(context).primaryColorLight,
             controller: emailController,
             decoration: InputDecoration(
-              labelText: "Email",
-              fillColor: Colors.lightBlue,
-              hoverColor: Colors.lightBlue,
+              labelText: "Email or Phone",
+              fillColor: Theme.of(context).primaryColorLight,
+              hoverColor: Theme.of(context).primaryColorLight,
               suffixIcon: Icon(Icons.mail_outline),
               border: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: Colors.lightBlue,
+                  color: Theme.of(context).primaryColorLight,
                   style: BorderStyle.none,
                 ),
               ),
@@ -140,83 +144,68 @@ class _LoginWidgetState extends State<LoginWidget> {
           ),
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 20),
           child: Stack(children: [
             ElevatedButton.icon(
               style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(
+                    Theme.of(context).primaryColor),
                 animationDuration: Duration(seconds: 1),
                 padding: MaterialStateProperty.all<EdgeInsets>(
                   EdgeInsets.symmetric(
-                    vertical: StaticDataStore.DType == DeviceType.Tablet ||
-                            StaticDataStore.DType == DeviceType.Phone
-                        ? 10
-                        : 20,
                     horizontal: 40,
+                    vertical: 10,
                   ),
                 ),
+                elevation: MaterialStateProperty.all<double>(0),
               ),
               onPressed: () async {
                 // checking the validity of input values
-                if (emailController.text == "" &&
+                if ((StaticDataStore.isEmail(emailController.text) ||
+                        MatchesPattern(emailController.text, PhoneRegexp)) &&
                     passwordController.text == "") {
-                  context.read<AuthBloc>().add(AuthAdminLoginNotSuccesfulEvent(
-                      "please fill your email and password"));
+                  context.read<UserBloc>().add(UserLoginNotSuccesfulEvent(
+                      "please fill your email/phone and password"));
                   return;
                 } else if (emailController.text == "") {
-                  context.read<AuthBloc>().add(AuthAdminLoginNotSuccesfulEvent(
-                      "please fill the email entry"));
+                  context.read<UserBloc>().add(UserLoginNotSuccesfulEvent(
+                      "please fill the email/phone entry"));
                   return;
                 } else if (passwordController.text == "") {
-                  context.read<AuthBloc>().add(AuthAdminLoginNotSuccesfulEvent(
-                      "Please fill the password"));
+                  context.read<UserBloc>().add(
+                      UserLoginNotSuccesfulEvent("Please fill the password"));
                   return;
-                } else if (!StaticDataStore.isEmail(emailController.text)) {
-                  context.read<AuthBloc>().add(AuthAdminLoginNotSuccesfulEvent(
-                      "Invalid email address "));
+                } else if (!(StaticDataStore.isEmail(emailController.text) ||
+                    MatchesPattern(emailController.text, PhoneRegexp))) {
+                  context.read<UserBloc>().add(UserLoginNotSuccesfulEvent(
+                      "Invalid email/phone address"));
                   return;
                 }
-
                 if (emailController.text != "" &&
                     passwordController.text != "") {
                   // Either the email controller or the password controller are empty string.
-                  context.read<AuthBloc>().add(AdminLoginInProgressEvent());
-                  final userSate = await context.read<AuthBloc>().login(
-                      AuthLoginEvent(
-                          emailController.text, passwordController.text));
-                  if (userSate is AuthAdminLoggedIn) {
-                    context.read<AuthBloc>().add(
-                        AuthAdminLoggedInEvent(userSate.user, userSate.role));
+                  context.read<UserBloc>().add(UserLoginInProgressEvent());
+                  String dtext = emailController.text;
+                  if (MatchesPattern(emailController.text, PhoneRegexp) &&
+                      (emailController.text.trim()[0] == "0")) {
+                    dtext = emailController.text.substring(1);
+                    dtext = "+251" + dtext;
+                  }
+                  //
+                  final userSate = await context
+                      .read<UserBloc>()
+                      .login(UserLoginEvent(dtext, passwordController.text));
+                  if (userSate is Authenticated) {
+                    Navigator.of(context).pushNamed(HomeScreen.RouteName);
+                    setState(() {});
                     context
                         .read<UserBloc>()
-                        .add(UserLoggedInEvent(user: userSate.user));
-                    Navigator.of(context).pushNamed(HomeScreen.RouteName);
-
-                    // } else {
-                    //   Navigator.pushNamed(context, AuthScreen.RouteName);
-                    // }
-
-                    // context.read<UserBloc>().add(UserLoggedInEvent(
-                    //     user: userSate.user, role: userSate.role));
-
-                    // if (userSate.role == ROLE_SUPERADMIN) {
-                    //   context.read<UserBloc>().add(SuperAdminLoggedInEvent());
-                    // }
-                    // if (userSate.role == ROLE_AGENT) {
-                    //   context.read<UserBloc>().add(AgentLoggedInEvent());
-                    // }
-                    // if (userSate.role == ROLE_MERCHANT) {
-                    //   context.read<UserBloc>().add(MerchantLoggedInEvent());
-                    // }
-                    // if (userSate.role == ROLE_ADMIN) {
-                    //   context.read<UserBloc>().add(AdminLoggedInEvent());
-                    // }
-
-                  } else if (userSate is AuthAdminLoginNotSuccesful) {
+                        .add(UserLoggedInEvent(userSate.user, userSate.role));
+                  } else if (userSate is NotAuthenticated) {
                     context
-                        .read<AuthBloc>()
-                        .add(AuthAdminLoginNotSuccesfulEvent(userSate.Msg));
-                  } else if (userSate is AuthAdminLoginOnProgress) {
-                    context.read<AuthBloc>().add(AdminLoginInProgressEvent());
+                        .read<UserBloc>()
+                        .add(UserLoginNotSuccesfulEvent(userSate.Msg));
+                  } else if (userSate is UserLoginOnProgressState) {
+                    context.read<UserBloc>().add(UserLoginInProgressEvent());
                   }
                 }
               },
@@ -228,24 +217,36 @@ class _LoginWidgetState extends State<LoginWidget> {
                 ),
               ),
             ),
+
             // !(context.watch<AuthBloc>().state is AuthAdminLoginOnProgress)
           ]),
         ),
-        GestureDetector(
-          onTap: () {
-            widget.forgotFunction();
-          },
-          child: Container(
-            padding: EdgeInsets.all(10),
+        // GestureDetector(
+        //   onTap: () {
+        //     widget.forgotFunction();
+        //   },
+        //   child: Container(
+        //     padding: EdgeInsets.all(10),
+        //     child: Text(
+        //       "forgot password ",
+        //       style: TextStyle(
+        //         fontWeight: FontWeight.bold,
+        //         color: Theme.of(context).primaryColor,
+        //       ),
+        //     ),
+        //   ),
+        // )
+        FlatButton(
             child: Text(
-              "forgot password ",
+              "Confirmation ",
               style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColor,
+                fontStyle: FontStyle.italic,
+                color: Colors.blue,
               ),
             ),
-          ),
-        )
+            onPressed: () {
+              Navigator.of(context).pushNamed(ConfirmationScreen.RouteName, );
+            }),
       ],
     );
   }

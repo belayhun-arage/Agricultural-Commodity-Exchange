@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "/home/belay/go/src/github.com/belayhun-arage/agri-net/agri_net_frontend/build/google_maps_flutter/intermediates/res/merged/debug/layout/notification_template_part_chronometer.xml",
+        "source": "/home/belay/.gradle/caches/transforms-2/files-2.1/c1ebda589683e9beaa06b540aac78854/core-1.6.0/res/layout/notification_template_part_chronometer.xml"
+    },
+    {
+        "merged": "/home/belay/go/src/github.com/belayhun-arage/agri-net/agri_net_frontend/build/google_maps_flutter/intermediates/res/merged/debug/layout/notification_template_part_time.xml",
+        "source": "/home/belay/.gradle/caches/transforms-2/files-2.1/c1ebda589683e9beaa06b540aac78854/core-1.6.0/res/layout/notification_template_part_time.xml"
+    },
+    {
+        "merged": "/home/belay/go/src/github.com/belayhun-arage/agri-net/agri_net_frontend/build/google_maps_flutter/intermediates/res/merged/debug/layout/notification_action_tombstone.xml",
+        "source": "/home/belay/.gradle/caches/transforms-2/files-2.1/c1ebda589683e9beaa06b540aac78854/core-1.6.0/res/layout/notification_action_tombstone.xml"
+    },
+    {
+        "merged": "/home/belay/go/src/github.com/belayhun-arage/agri-net/agri_net_frontend/build/google_maps_flutter/intermediates/res/merged/debug/layout/notification_template_icon_group.xml",
+        "source": "/home/belay/.gradle/caches/transforms-2/files-2.1/c1ebda589683e9beaa06b540aac78854/core-1.6.0/res/layout/notification_template_icon_group.xml"
+    },
+    {
+        "merged": "/home/belay/go/src/github.com/belayhun-arage/agri-net/agri_net_frontend/build/google_maps_flutter/intermediates/res/merged/debug/layout/custom_dialog.xml",
+        "source": "/home/belay/.gradle/caches/transforms-2/files-2.1/c1ebda589683e9beaa06b540aac78854/core-1.6.0/res/layout/custom_dialog.xml"
+    },
+    {
+        "merged": "/home/belay/go/src/github.com/belayhun-arage/agri-net/agri_net_frontend/build/google_maps_flutter/intermediates/res/merged/debug/layout/notification_action.xml",
+        "source": "/home/belay/.gradle/caches/transforms-2/files-2.1/c1ebda589683e9beaa06b540aac78854/core-1.6.0/res/layout/notification_action.xml"
+    }
+]

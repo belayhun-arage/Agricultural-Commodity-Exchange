@@ -1,11 +1,7 @@
 import '../../libs.dart';
-import '../../theme.dart';
 
 class UserScreenAppBarDrawer extends StatefulWidget
     implements PreferredSizeWidget {
-  User user;
-  UserScreenAppBarDrawer({required this.user});
-
   @override
   State<UserScreenAppBarDrawer> createState() => _UserScreenAppBarDrawerState();
 
@@ -34,7 +30,7 @@ class _UserScreenAppBarDrawerState extends State<UserScreenAppBarDrawer> {
                 SizedBox(
                   width: 30,
                 ),
-                UserAccountePage(user: widget.user),
+                UserAccountePage(),
               ],
             ),
           ],

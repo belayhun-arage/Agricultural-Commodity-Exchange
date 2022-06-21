@@ -46,7 +46,9 @@ class _AuthScreenState extends State<AuthScreen> {
                 child: Column(
                   children: [
                     Container(
-                      color: Colors.white,
+                      // color: Colors.white,
+                      color: Colors.lightGreen,
+
                       child: ClipRRect(
                         borderRadius: BorderRadius.only(
                             bottomRight: Radius.elliptical(300, 100)),
@@ -130,7 +132,7 @@ class _AuthScreenState extends State<AuthScreen> {
                               ),
                             ),
                             top: 0,
-                            left: MediaQuery.of(context).size.width * 0.4 - 10,
+                            left: MediaQuery.of(context).size.width * 0.35 - 10,
                           ),
                         ],
                       ),

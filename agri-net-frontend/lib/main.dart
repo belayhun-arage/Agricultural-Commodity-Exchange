@@ -1,28 +1,102 @@
-import 'package:agri_net_frontend/admins/widgets/register_admin_form.dart';
+import 'package:flutter/services.dart';
 
 import 'libs.dart';
+import 'users/data_provider/admin_dataProvider.dart';
 
 void main() {
-  runApp(MultiBlocProvider(providers: [
-    BlocProvider<AuthBloc>(
-        create: (context) => AuthBloc(
-              repo: AuthRepo(provider: AuthProvider()),
-            )),
-    BlocProvider<UserBloc>(
-      create: (context) =>
-          UserBloc(userRepo: UserRepo(userProvider: UserProvider())),
+  WidgetsFlutterBinding.ensureInitialized();
+  // Step 3
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then(
+    (value) => runApp(
+      MultiBlocProvider(
+        providers: [
+          BlocProvider<UserBloc>(
+            create: (context) =>
+                UserBloc(repo: UserRepo(provider: AuthProvider())),
+          ),
+          BlocProvider(create: (context) {
+            return AdminsBloc(
+                adminsRepo: AdminsRepo(adminsProvider: AdminProvider()));
+          }),
+          BlocProvider(create: (context) {
+            return ProductTypeBloc(
+              ProductTypesRepository(ProductTypesProvider()),
+            );
+          }),
+          BlocProvider(
+            create: (context) {
+              return StoreBloc(
+                  storeRepo: StoreRepo(storeProvider: StoreProvider()));
+            },
+          ),
+          BlocProvider(create: (context) {
+            return MyProductsBloc(
+              ProductsRepo(
+                ProductProvider(),
+              ),
+            );
+          }),
+          BlocProvider(create: (context) {
+            return IndexBloc();
+          }),
+          BlocProvider(create: (context) {
+            return ProductsBloc(repo: ProductsRepo(ProductProvider()));
+          }),
+          BlocProvider(create: (context) {
+            return UsersBloc(UsersRepo(UsersProvider()));
+          }),
+          BlocProvider(create: (context) {
+            return TransactionBloc(TransactionRepo(TransactionProvider()));
+          }),
+          BlocProvider(create: (context) {
+            return AdminsBloc(
+                adminsRepo: AdminsRepo(adminsProvider: AdminProvider()));
+          }),
+          BlocProvider(create: (context) {
+            return AgentsBloc(
+                agentRepo: AgentRepo(agentProvider: AgentProvider()));
+          }),
+          BlocProvider(create: (context) {
+            return MercahntsBloc(
+                merchantRepo:
+                    MerchantRepo(merchantProvider: MerchantProvider()));
+          }),
+          BlocProvider(create: (context) {
+            return ProductTypeBloc(
+              ProductTypesRepository(ProductTypesProvider()),
+            );
+          }),
+          BlocProvider(
+            create: (context) {
+              return StoreBloc(
+                  storeRepo: StoreRepo(storeProvider: StoreProvider()));
+            },
+          ),
+          BlocProvider(create: (context) {
+            return MyProductsBloc(
+              ProductsRepo(
+                ProductProvider(),
+              ),
+            );
+          }),
+          BlocProvider(create: (context) {
+            return ProductsBloc(repo: ProductsRepo(ProductProvider()));
+          }),
+          BlocProvider(create: (context) {
+            return NotificationsBloc(
+              NotificationRepository(
+                NotificationProvider(),
+              ),
+            );
+          }),
+        ],
+        child: MyHomePage(),
+      ),
     ),
-    BlocProvider(create: (context) {
-      return AdminsBloc(
-          adminsRepo: AdminsRepo(adminsProvider: AdminsProvider()))
-        ..add(GetAllAdminsEvent());
-    }),
-    BlocProvider(create: (context) {
-      return ProductBloc(
-        repo: ProductRepo(provider: ProductProvider()),
-      )..add(GetProductListEvent());
-    }),
-  ], child: MyHomePage()));
+  );
 }
 
 class MyHomePage extends StatefulWidget {
@@ -36,15 +110,11 @@ class MyHomePage extends StatefulWidget {
 class MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    // if (MyHomePage.once == 0) {
-    //   context.read<AdminsBloc>().add(GetAllUsersEvent());
-    //   MyHomePage.once++;
-    // }
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Agri-Net',
         theme: ThemeData(
           primaryColor: Colors.green, //  MaterialColor(primary, swatch),
-          canvasColor: Colors.white,
         ),
         initialRoute: AuthScreen.RouteName,
         onGenerateRoute: (setting) {
@@ -57,25 +127,15 @@ class MyHomePageState extends State<MyHomePage> {
             return MaterialPageRoute(builder: (context) {
               return ProductScreen();
             });
-          } else if (route == ProfileScreen.RouteName) {
+          } else if (route == MerchantsScreen.RouteName) {
             return MaterialPageRoute(builder: (context) {
-              return ProfileScreen();
+              return MerchantsScreen();
             });
-          } else if (route == RegisteredMerchantsScreen.RouteName) {
+          } else if (route == AgentsScreen.RouteName) {
             return MaterialPageRoute(builder: (context) {
-              return RegisteredMerchantsScreen();
+              return AgentsScreen();
             });
-          }
-          // else if (route == ContractScreen.RouteName) {
-          //   return MaterialPageRoute(builder: (context) {
-          //     return ContractScreen();
-          //   });
-          // } else if (route == NotificationScreen.RouteName) {
-          //   return MaterialPageRoute(builder: (context) {
-          //     return NotificationScreen();
-          //   });
-          // }
-          else if (route == HomeScreen.RouteName) {
+          } else if (route == HomeScreen.RouteName) {
             return MaterialPageRoute(builder: (context) {
               return HomeScreen();
             });
@@ -83,9 +143,68 @@ class MyHomePageState extends State<MyHomePage> {
             return MaterialPageRoute(builder: (context) {
               return AdminsScreen();
             });
-          } else if (route == RegisterAdminPage.RouteName) {
+          } else if (route == TransactionDetailScreen.RouteName) {
             return MaterialPageRoute(builder: (context) {
-              return RegisterAdminPage();
+              Transaction transaction = ((setting.arguments
+                  as Map<String, Transaction>)["transaction"] as Transaction);
+              return TransactionDetailScreen(transaction);
+            });
+          } else if (route == CreateTransactionScreen.RouteName) {
+            ProductPost post =
+                (setting.arguments as Map<String, ProductPost>)["post"]!;
+            return MaterialPageRoute(builder: (context) {
+              return CreateTransactionScreen(post);
+            });
+          } else if (route == ConfirmationScreen.RouteName) {
+            return MaterialPageRoute(builder: (context) {
+              return ConfirmationScreen();
+            });
+          } else if (route == NotificationsScreen.RouteName) {
+            return MaterialPageRoute(builder: (context) {
+              return NotificationsScreen();
+            });
+          } else if (route == UserProfileScreen.RouteName) {
+            User args = setting.arguments as User;
+            return MaterialPageRoute(builder: (context) {
+              return UserProfileScreen(
+                requestedUser: args,
+              );
+            });
+          } else if (route == UploadProductPostImages.RouteName) {
+            ProductPost post =
+                (setting.arguments as Map<String, dynamic>)["post"];
+            return MaterialPageRoute(builder: (context) {
+              return UploadProductPostImages(post);
+            });
+          } else if (route == StoreSelectionScreen.RouteName) {
+            final arguments = setting.arguments as Map<String, dynamic>;
+            // ProductTypeState state = (arguments["state"]) as ProductTypeState;
+            List<Store> stores = arguments["stores"] as List<Store>;
+            Function callBack = (arguments["callback"] as Function);
+            return MaterialPageRoute(builder: (context) {
+              return StoreSelectionScreen(stores, callBack);
+            });
+          } else if (route == ProductPostDetailScreen.RouteName) {
+            final ProductPost post = ((setting.arguments
+                as Map<String, dynamic>)["post"] as ProductPost);
+            return MaterialPageRoute(builder: (context) {
+              return ProductPostDetailScreen(post);
+            });
+          } else if (route == ProductTypeSelectionScreen.RouteName) {
+            final arguments = setting.arguments as Map<String, dynamic>;
+            ProductTypeState state = (arguments["state"]) as ProductTypeState;
+            List<ProductType> products =
+                arguments["products"] as List<ProductType>;
+            Function callBack = (arguments["callback"] as Function);
+            String text = (arguments["text"] as String);
+
+            return MaterialPageRoute(builder: (context) {
+              return ProductTypeSelectionScreen(
+                  state, products, callBack, text);
+            });
+          } else if (route == MyStoresScreen.RouteName) {
+            return MaterialPageRoute(builder: (context) {
+              return MyStoresScreen();
             });
           }
         });

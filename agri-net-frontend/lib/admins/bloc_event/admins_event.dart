@@ -4,9 +4,9 @@ class AdminsEvent {}
 
 class GetAllAdminsEvent extends AdminsEvent {}
 
-class AllUsersRetrievedEvent extends AdminsEvent {
-  List<User> usersList = [];
-  AllUsersRetrievedEvent({required this.usersList});
+class AllAdminsRetrievedEvent extends AdminsEvent {
+  List<Admin> adminsList = [];
+  AllAdminsRetrievedEvent({required this.adminsList});
 }
 
 class NoUserFound extends AdminsEvent {}
@@ -40,8 +40,8 @@ class CreateNewAdminEvent extends AdminsEvent {
 }
 
 class AdminCreatedEvent extends AdminsEvent {
-  User user;
-  AdminCreatedEvent({required this.user});
+  Admin admin;
+  AdminCreatedEvent({required this.admin});
 }
 
 class FailedToCreateAdminEvent extends AdminsEvent {
@@ -49,9 +49,17 @@ class FailedToCreateAdminEvent extends AdminsEvent {
   FailedToCreateAdminEvent({required this.msg});
 }
 
+class FailedToCreateAgentEvent extends AdminsEvent {
+  String msg;
+  FailedToCreateAgentEvent({required this.msg});
+}
+
 class SomethingWrongEvent extends AdminsEvent {}
 
-class GetAllMerchantsEvent extends AdminsEvent {}
+class GetAllMerchantsEvent extends AdminsEvent {
+  Admin admin;
+  GetAllMerchantsEvent({required this.admin});
+}
 
 class AllMerchantsFechedEvent extends AdminsEvent {
   List<Merchant> merchants;
@@ -62,7 +70,7 @@ class CreatNewMerchantEvent extends AdminsEvent {
   String firstname;
   String lastname;
   String phone;
-  String email;
+  String? email;
   String kebele;
   String woreda;
   String city;
@@ -75,7 +83,7 @@ class CreatNewMerchantEvent extends AdminsEvent {
       {required this.firstname,
       required this.lastname,
       required this.phone,
-      required this.email,
+      this.email,
       required this.city,
       required this.kebele,
       required this.woreda,
@@ -86,7 +94,10 @@ class CreatNewMerchantEvent extends AdminsEvent {
       required this.longitude});
 }
 
-class GetALlAgentsEvent extends AdminsEvent {}
+class GetAllAgentsEvent extends AdminsEvent {
+  Admin admin;
+  GetAllAgentsEvent({required this.admin});
+}
 
 class AllAgentsFechedEvent extends AdminsEvent {
   List<Agent> agents;
@@ -96,6 +107,11 @@ class AllAgentsFechedEvent extends AdminsEvent {
 class NewAgentCreatedEvent extends AdminsEvent {
   Agent agent;
   NewAgentCreatedEvent({required this.agent});
+}
+
+class NewMerchantCreatedEvent extends AdminsEvent {
+  Merchant merchant;
+  NewMerchantCreatedEvent({required this.merchant});
 }
 
 class CreatNewAgentEvent extends AdminsEvent {

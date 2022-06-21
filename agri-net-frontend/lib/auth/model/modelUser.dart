@@ -1,4 +1,3 @@
-import '../../libs.dart';
 
 class User {
   int id;
@@ -21,18 +20,43 @@ class User {
     required this.imgurl,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) {
+  User copyWith(
+      {String? firstName,
+      String? lastName,
+      String? Email,
+      String? Phone,
+      String? NewImgUrl,
+      String? Lang}) {
     return User(
-      id: int.parse("${json['id']}"),
-      firstname: json["firstname"],
-      lastname: json["lastname"],
-      phone: json["phone"] ?? '',
-      email: json["email"],
-      lang: json["lang"],
-      imgurl: (json["imgurl"] ?? ''),
-      createdAt:
-          DateTime.fromMillisecondsSinceEpoch((json["created_at"] ?? 0) * 1000),
-    );
+        id: this.id,
+        firstname: firstName ?? this.firstname,
+        lastname: lastName ?? this.lastname,
+        phone: Phone ?? this.phone,
+        email: Email ?? this.email,
+        lang: Lang ?? this.lang,
+        imgurl: NewImgUrl ?? this.imgurl);
+  }
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    int id = int.parse("${json['id']}");
+    String fName = json["firstname"];
+    String lName = json["lastname"];
+    String phone = json["phone"] ?? '';
+    String emaile = json["email"];
+    String lang = json["lang"];
+    String url = (json["imgurl"] ?? '');
+    DateTime createdAt =
+        DateTime.fromMillisecondsSinceEpoch((json["created_at"] ?? 0) * 1000);
+
+    return User(
+        id: id,
+        firstname: fName,
+        lastname: lName,
+        phone: phone,
+        email: emaile,
+        lang: lang,
+        imgurl: url,
+        createdAt: createdAt);
   }
 
   Map<String, dynamic> toJson() {
@@ -48,6 +72,3 @@ class User {
     };
   }
 }
-
-
-

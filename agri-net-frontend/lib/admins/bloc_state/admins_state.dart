@@ -1,4 +1,3 @@
-import 'package:agri_net_frontend/auth/model/modelUser.dart';
 import 'package:agri_net_frontend/libs.dart';
 
 class AdminsState {}
@@ -9,8 +8,8 @@ class GetAllAdminsState extends AdminsState {}
 class LoadingUsersState extends AdminsState {}
 
 class AllAdminsRetrievedState extends AdminsState {
-  List<User> usersList = [];
-  AllAdminsRetrievedState({required this.usersList});
+  List<Admin> adminsList = [];
+  AllAdminsRetrievedState({required this.adminsList});
 }
 
 class NoAdminFoundState extends AdminsState {}
@@ -18,8 +17,8 @@ class NoAdminFoundState extends AdminsState {}
 class CreateNewUserState extends AdminsState {}
 
 class NewAdminCreatedState extends AdminsState {
-  User user;
-  NewAdminCreatedState({required this.user});
+  Admin admin;
+  NewAdminCreatedState({required this.admin});
 }
 
 class FailedToCreateAdminState extends AdminsState {
@@ -44,10 +43,13 @@ class FailedToFechMerchntsState extends AdminsState {
   FailedToFechMerchntsState({required this.msg});
 }
 
-class NoMerchantsFoundState extends AdminsState {}
+class NoMerchantsFoundState extends AdminsState {
+  String msg;
+  NoMerchantsFoundState({required this.msg});
+}
 
 class NewMerchantPostedState extends AdminsState {
-  MerchantRegResp newMerchant;
+  Merchant newMerchant;
   NewMerchantPostedState({required this.newMerchant});
 }
 

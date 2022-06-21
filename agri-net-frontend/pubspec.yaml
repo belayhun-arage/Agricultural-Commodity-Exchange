@@ -30,6 +30,13 @@ dependencies:
   string_validator: ^0.3.0
   path: ^1.8.0
   equatable: ^2.0.0
+  google_maps_flutter: ^2.1.6
+  map_pin_picker: ^0.0.1
+  # multi_image_picker: ^4.8.1
+  # syncfusion_flutter_maps: ^18.2.56-beta
+  # syncfusion_flutter_maps: ^20.1.57
+  geolocator: ^8.2.1
+  geocoding: ^2.0.4
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -37,6 +44,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_bloc: ^7.1.0
   http: ^0.13.4
+  map_picker: ^0.0.3
+  # flutter_search_bar: ^2.1.0
 
 dev_dependencies:
   flutter_test:
@@ -48,10 +57,10 @@ dev_dependencies:
 # The following section is specific to Flutter.
 flutter:
   uses-material-design: true
-
   assets:
     - assets/images/
     - assets/icons/
+    # - assets/images/images/profile/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

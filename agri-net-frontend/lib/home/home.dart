@@ -7,3 +7,4 @@ export 'screens/screens.dart';
 export 'widgets/widget.dart';
 export "data_provider/data_provider.dart";
 export 'repository/repository.dart';
+export "model/model.dart";

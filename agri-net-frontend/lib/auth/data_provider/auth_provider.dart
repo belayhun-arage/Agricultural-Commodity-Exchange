@@ -3,7 +3,6 @@ import 'dart:convert';
 import "../../libs.dart";
 import 'package:http/http.dart';
 
-// import 'encoding/json';
 class AuthProvider {
   static Client client = Client();
 
@@ -32,38 +31,99 @@ class AuthProvider {
       } else {
         return null;
       }
-    } catch (e, a) {
+    } catch (e) {
       return null;
     }
   }
 
-  Future<List<Map<String, dynamic>>?> searchMaids(
-      String text, int offset) async {
-    final headers = {"Authorization": "Bearer ${StaticDataStore.USER_TOKEN}"};
-    try {
-      var response = await client.get(
-        Uri.parse(StaticDataStore.URI +
-            "api/search/maids/?offset=$offset&limit=3&q=$text"),
-        headers: headers,
+  
+
+  Future<UsersLoginResponse> confirmUserByPhone(String phone  , String password) async {
+   try {
+      final input = {
+        "phone": phone ,
+        "password": password,
+      };
+      var response = await client.post(
+        Uri(
+          scheme: "http",
+          host: StaticDataStore.HOST,
+          port: StaticDataStore.PORT,
+          path: "/api/cxp/account/confirm",
+        ),
+        body: jsonEncode(input),
+        headers: {"Content-Type": "application/json"},
       );
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        final body = jsonDecode(response.body) as List<dynamic>;
-        final map = body.map<Map<String, dynamic>>((elem) {
-          return (elem as Map<String, dynamic>);
-        }).toList();
-        return map;
+      if (response.statusCode == 200) {
+        var body = jsonDecode(response.body) as Map<String, dynamic>;
+        StaticDataStore.HEADERS = response.headers;
+        StaticDataStore.ROLE = body["role"];
+        StaticDataStore.USER_TOKEN = body["token"];
+        if (StaticDataStore.ROLE == ROLE_ADMIN) {
+          return UsersLoginResponse(
+              statusCode: response.statusCode,
+              msg: body["msg"],
+              user: Admin.fromJson(body["user"]),
+              role: body["role"]);
+        }
+        if (StaticDataStore.ROLE == ROLE_MERCHANT) {
+          return UsersLoginResponse(
+              statusCode: response.statusCode,
+              msg: body["msg"],
+              user: Merchant.fromJson(body["user"]),
+              role: body["role"]);
+        }
+        if (StaticDataStore.ROLE == ROLE_AGENT) {
+          return UsersLoginResponse(
+              statusCode: response.statusCode,
+              msg: body["msg"],
+              user: Agent.fromJson(body["User"]),
+              role: body["role"]);
+        }
+        if (StaticDataStore.ROLE == ROLE_SUPERADMIN) {
+          return UsersLoginResponse(
+              statusCode: response.statusCode,
+              msg: "${body["msg"]}",
+              user: User.fromJson(body["user"] as Map<String, dynamic>),
+              role: "${body["role"]}");
+        } else {
+          return UsersLoginResponse(
+            statusCode: 500,
+            msg: "Something went wrong",
+          );
+        }
+      } else if (response.statusCode == 401 ||
+          response.statusCode == 500 ||
+          response.statusCode == 404) {
+        var body = jsonDecode(response.body) as Map<String, dynamic>;
+        return UsersLoginResponse(
+          statusCode: response.statusCode,
+          msg:
+              "${(response.statusCode == 404) ? "invalid email/phone or password" : STATUS_CODES[response.statusCode] ?? "?"}",
+        );
       } else {
-        return null;
+        return UsersLoginResponse(
+          statusCode: 999,
+          msg: STATUS_CODES[999]!,
+        );
       }
-    } catch (e, a) {
-      print(a);
-      return null;
+    } catch (e) {
+      return UsersLoginResponse(
+        statusCode: 999,
+        msg: STATUS_CODES[999]!,
+      );
     }
   }
 
   Future<UsersLoginResponse> loginAdmin(String email, String password) async {
     try {
       print("Sending login request with :" + "$email   $password");
+      final input = {
+        "email": StaticDataStore.isEmail(email) ? email : "",
+        "phone": email.startsWith("+251") ? email : "",
+        "password": password,
+      };
+      print(jsonEncode(input));
       var response = await client.post(
         Uri(
           scheme: "http",
@@ -71,44 +131,63 @@ class AuthProvider {
           port: StaticDataStore.PORT,
           path: "/api/login",
         ),
-        body: jsonEncode(
-          {
-            "email": email,
-            "password": password,
-          },
-        ),
+        body: jsonEncode(input),
         headers: {"Content-Type": "application/json"},
       );
-
-      print(
-          "You have the following response body ${response.body} and response status ${response.statusCode} DD:");
       if (response.statusCode == 200) {
         var body = jsonDecode(response.body) as Map<String, dynamic>;
-
         StaticDataStore.HEADERS = response.headers;
         StaticDataStore.ROLE = body["role"];
         StaticDataStore.USER_TOKEN = body["token"];
-        // Token = body["token"];
-        return UsersLoginResponse(
-            statusCode: response.statusCode,
-            msg: "${body["msg"]}",
-            user: User.fromJson(body["user"] as Map<String, dynamic>),
-            role: "${body["role"]}");
+        if (StaticDataStore.ROLE == ROLE_ADMIN) {
+          return UsersLoginResponse(
+              statusCode: response.statusCode,
+              msg: body["msg"],
+              user: Admin.fromJson(body["user"]),
+              role: body["role"]);
+        }
+        if (StaticDataStore.ROLE == ROLE_MERCHANT) {
+          return UsersLoginResponse(
+              statusCode: response.statusCode,
+              msg: body["msg"],
+              user: Merchant.fromJson(body["user"]),
+              role: body["role"]);
+        }
+        if (StaticDataStore.ROLE == ROLE_AGENT) {
+          return UsersLoginResponse(
+              statusCode: response.statusCode,
+              msg: body["msg"],
+              user: Agent.fromJson(body["User"]),
+              role: body["role"]);
+        }
+        if (StaticDataStore.ROLE == ROLE_SUPERADMIN) {
+          return UsersLoginResponse(
+              statusCode: response.statusCode,
+              msg: "${body["msg"]}",
+              user: User.fromJson(body["user"] as Map<String, dynamic>),
+              role: "${body["role"]}");
+        } else {
+          return UsersLoginResponse(
+            statusCode: 500,
+            msg: "Something went wrong",
+          );
+        }
       } else if (response.statusCode == 401 ||
           response.statusCode == 500 ||
           response.statusCode == 404) {
         var body = jsonDecode(response.body) as Map<String, dynamic>;
         return UsersLoginResponse(
           statusCode: response.statusCode,
-          msg: "${body["message"]}",
+          msg:
+              "${(response.statusCode == 404) ? "invalid email/phone or password" : STATUS_CODES[response.statusCode] ?? "?"}",
         );
       } else {
         return UsersLoginResponse(
-          statusCode: response.statusCode,
+          statusCode: 999,
           msg: STATUS_CODES[999]!,
         );
       }
-    } catch (e, a) {
+    } catch (e) {
       return UsersLoginResponse(
         statusCode: 999,
         msg: STATUS_CODES[999]!,
@@ -133,7 +212,7 @@ class AuthProvider {
         return MessageOnly("Internal Problem", false);
       }
       return MessageOnly("Sorry,problem happened, try again", false);
-    } catch (e, a) {
+    } catch (e) {
       return MessageOnly(
           "can't found the server \nplease check your internet connection",
           false);

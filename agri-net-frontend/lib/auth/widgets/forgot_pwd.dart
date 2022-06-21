@@ -37,13 +37,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            BlocBuilder<AuthBloc, AuthBlocState>(builder: (context, state) {
+            BlocBuilder<UserBloc, UserState>(builder: (context, state) {
               return Container(
                 decoration: BoxDecoration(
                   // color: Theme.of(context).primaryColor,
                   border: Border.all(
                     color: () {
-                      if (state is AuthPasswordSentLoginAndChangePassword) {
+                      if (state
+                          is UserPasswordSentLoginAndChangePasswordState) {
                         return Colors.green;
                       } else if (state is AuthForgotPasswordRequestFailed) {
                         return Colors.red;
@@ -55,9 +56,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 ),
                 padding: EdgeInsets.all(15),
                 child: () {
-                  if (state is AuthForgotPasswordInProgress) {
+                  if (state is UserForgotPasswordInProgressState) {
                     return CircularProgressIndicator();
-                  } else if (state is AuthPasswordSentLoginAndChangePassword) {
+                  } else if (state
+                      is UserPasswordSentLoginAndChangePasswordState) {
                     widget.loginWidgetFunction();
                     return Text(
                       " forgoten email sent to your email",
@@ -134,8 +136,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 onPressed: () async {
                   if (emailController.text != "") {
                     context
-                        .read<AuthBloc>()
-                        .add(AuthForgotPasswordEvent(emailController.text));
+                        .read<UserBloc>()
+                        .add(UserForgotPasswordEvent(emailController.text));
                   }
                 },
                 icon: Icon(Icons.send_to_mobile),

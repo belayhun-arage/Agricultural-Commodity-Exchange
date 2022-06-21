@@ -1,6 +1,7 @@
 import '../../libs.dart';
 
 class RegisteredAgentsScreen extends StatefulWidget {
+  static String RouteName = "agents";
   const RegisteredAgentsScreen({Key? key}) : super(key: key);
 
   @override
@@ -8,6 +9,23 @@ class RegisteredAgentsScreen extends StatefulWidget {
 }
 
 class _RegisteredAgentsScreenState extends State<RegisteredAgentsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    print("Init state");
+    SchedulerBinding.instance?.addPostFrameCallback((_) {
+      final UserBloc _userBloc = BlocProvider.of<UserBloc>(context);
+      if ((_userBloc.state is Authenticated)) {
+        print("SchedulerBinding state");
+        BlocProvider.of<AdminsBloc>(context).add(GetAllAgentsEvent(
+            admin: (_userBloc.state as Authenticated).user as Admin));
+      } else {
+        print("Exception state");
+        throw Exception("Not an admin");
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +49,7 @@ class _RegisteredAgentsScreenState extends State<RegisteredAgentsScreen> {
             children: [
               IconButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed(RegisterAdminPage.RouteName);
+                  Navigator.of(context).pushNamed(RegisterAgentForm.RouteName);
                 },
                 icon: Icon(Icons.add),
                 color: Colors.black,
@@ -40,8 +58,11 @@ class _RegisteredAgentsScreenState extends State<RegisteredAgentsScreen> {
                 padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
                 child: InkWell(
                   onTap: () {
-                    Navigator.of(context)
-                        .pushNamed(RegisterAdminPage.RouteName);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => RegisterAgentForm()),
+                    );
                   },
                   child: Text(
                     "New",
@@ -71,18 +92,17 @@ class _RegisteredAgentsScreenState extends State<RegisteredAgentsScreen> {
             ],
           );
         }
-        if (state is NoAdminFoundState) {
+        if (state is NoAgentsFoundState) {
+          return Center(child: Text("You have no agent registered Yet!"));
+        }
+        if (state is FailedToFechAgentsState) {
           return Column(
             children: [
-              Text("No User is registered yet!"),
+              Center(child: Text("Sorry Some thing went wrong!")),
             ],
           );
         }
-        return Column(
-          children: [
-            Text("Some thing went wrong"),
-          ],
-        );
+        return Center(child: CircularProgressIndicator());
       }),
     );
   }
@@ -103,28 +123,44 @@ class _RegisteredAgentsScreenState extends State<RegisteredAgentsScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            CircleAvatar(
-                              child: ClipOval(
-                                child: Image.asset(
-                                  "assets/images/pp.jpg",
-                                  width: 70,
-                                  height: 70,
-                                  fit: BoxFit.cover,
+                        InkWell(
+                          onTap: (() => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => UserProfileScreen(
+                                    requestedUser: agents[counter],
+                                  ),
+                                ),
+                              )),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              CircleAvatar(
+                                child: ClipOval(
+                                  child: (agents[counter].imgurl != '')
+                                      ? Image.asset(
+                                          agents[counter].imgurl,
+                                          width: 70,
+                                          height: 70,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Icon(
+                                          Icons.person,
+                                        ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              width: 7.5,
-                            ),
-                            Text(agents[counter].postCount.toString()),
-                            Text(agents[counter].postCount.toString()),
-                          ],
+                              SizedBox(
+                                width: 7.5,
+                              ),
+                              Text(agents[counter].firstname),
+                              SizedBox(
+                                width: 7.5,
+                              ),
+                              Text(agents[counter].firstname)
+                            ],
+                          ),
                         ),
-                        Text(StaticDataStore.ROLE),
-                        IconButton(onPressed: () {}, icon: Icon(Icons.edit))
+                        IconButton(onPressed: () {}, icon: Icon(Icons.delete))
                       ],
                     ),
                   ),

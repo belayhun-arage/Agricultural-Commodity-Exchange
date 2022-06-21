@@ -1,9 +1,7 @@
-import 'package:path/path.dart';
-
 import '../../libs.dart';
 
 class RegisterAdminPage extends StatefulWidget {
-  static String RouteName = "admin";
+  static String RouteName = "admin/new";
   const RegisterAdminPage({Key? key}) : super(key: key);
 
   @override
@@ -25,6 +23,16 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
   TextEditingController latitudeControler = TextEditingController();
   TextEditingController longitudeController = TextEditingController();
 
+  final _controller = Completer<GoogleMapController>();
+  MapPickerController mapPickerController = MapPickerController();
+
+  final _formKey = GlobalKey<FormState>();
+
+  CameraPosition cameraPosition = const CameraPosition(
+      target: LatLng(30.653690770268437, 30.653690770268437), zoom: 0.0);
+
+  var textController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -45,6 +53,7 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
     regionController.dispose();
     latitudeControler.dispose();
     longitudeController.dispose();
+
     super.dispose();
   }
 
@@ -67,86 +76,237 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
               fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
         ),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                firstLastName(context),
-                Container(
-                  height: MediaQuery.of(context).size.height / 20,
-                  width: MediaQuery.of(context).size.width - 20,
-                  child: TextField(
-                    keyboardType: TextInputType.text,
-                    cursorColor: Theme.of(context).primaryColorLight,
-                    controller: emailController,
-                    decoration: InputDecoration(
-                      labelText: "Email",
-                      border: OutlineInputBorder(),
-                      suffixIcon: Icon(Icons.mail_outline),
+      body: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height * 0.4 + 30,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  firstLastName(context),
+                  Container(
+                    height: MediaQuery.of(context).size.height / 20,
+                    width: MediaQuery.of(context).size.width - 20,
+                    child: TextFormField(
+                      keyboardType: TextInputType.text,
+                      cursorColor: Theme.of(context).primaryColorLight,
+                      controller: emailController,
+                      decoration: InputDecoration(
+                        labelText: "Email",
+                        border: OutlineInputBorder(),
+                        suffixIcon: Icon(Icons.mail_outline),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Please enter your email address';
+                        }
+                        // Check if the entered email has the right format
+                        if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) {
+                          return 'Please enter a valid email address';
+                        }
+                        // Return null if the entered email is valid
+                        return null;
+                      },
+                      onChanged: (value) => emailController,
                     ),
                   ),
-                ),
-                emailPhone(context),
-                woredaCity(context),
-                uniqueAddress(context),
-                zoneRegion(context),
-                latLon(context)
-              ],
+                  emailPhone(context),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Address:",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                  woredaCity(context),
+                  uniqueAddress(context),
+                  zoneRegion(context),
+                  LatLon(context)
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
-            child: Container(
-              height: MediaQuery.of(context).size.height / 18,
-              width: MediaQuery.of(context).size.width / 3,
-              decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(5)),
-              child: InkWell(
-                onTap: () async {
-                  final state = await context.read<AdminsBloc>().registerAdmin(
-                      CreateNewAdminEvent(
-                          firstname: firstnameController.text,
-                          lastname: lastnameController.text,
-                          email: emailController.text,
-                          phone: phoneControler.text,
-                          kebele: kebeleController.text,
-                          city: cityControler.text,
-                          woreda: woredaController.text,
-                          zone: zoneController.text,
-                          region: regionController.text,
-                          unique_address: uniqueAddressController.text,
-                          latitude: double.parse(latitudeControler.text),
-                          longitude: double.parse(longitudeController.text)));
-                  if (state is NewAdminCreatedState) {
-                    print("\n\n");
-                    print(state);
-                    print("\n\n");
-                    context.read<AdminsBloc>().add(GetAllAdminsEvent());
-                    Navigator.of(context).pushNamed(AdminsScreen.RouteName);
-                  }
-                  if (state is FailedToCreateAdminState) {
-                    print("\n\n");
-                    print(state);
-                    print("\n\n");
-                    context.read<AdminsBloc>().add(FailedToCreateAdminEvent(
-                        msg: "Failed to register the user"));
-                    Navigator.of(context).pushNamed(AdminsScreen.RouteName);
-                  }
-                },
-                child: Center(
-                  child: Text(
-                    "Register",
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            Flexible(
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.4,
+                child: Stack(
+                  children: [
+                    Expanded(
+                      child: MapPicker(
+                        // pass icon widget
+                        iconWidget: Icon(
+                          Icons.location_pin,
+                          color: Colors.red,
+                          size: 30,
+                        ),
+                        //add map picker controller
+                        mapPickerController: mapPickerController,
+                        child: GoogleMap(
+                          myLocationEnabled: true,
+                          zoomControlsEnabled: false,
+                          // hide location button
+                          myLocationButtonEnabled: false,
+                          mapType: MapType.hybrid,
+                          //  camera position
+                          initialCameraPosition: cameraPosition,
+                          onMapCreated: (GoogleMapController controller) {
+                            _controller.complete(controller);
+                          },
+                          onCameraMoveStarted: () {
+                            // notify map is moving
+                            mapPickerController.mapMoving!();
+                            textController.text = "checking ...";
+                          },
+                          onCameraMove: (cameraPosition) {
+                            this.cameraPosition = cameraPosition;
+                          },
+                          onCameraIdle: () async {
+                            // notify map stopped moving
+                            mapPickerController.mapFinishedMoving!();
+                            //get address name from camera position
+                            List<Placemark> placemarks =
+                                await placemarkFromCoordinates(
+                              cameraPosition.target.latitude,
+                              cameraPosition.target.longitude,
+                            );
+
+                            // update the ui with the address
+                            uniqueAddressController.text =
+                                '${placemarks.first.name}';
+                            regionController.text =
+                                '${placemarks.first.administrativeArea}';
+                            zoneController.text =
+                                '${placemarks.first.subAdministrativeArea}';
+                            cityControler.text = '${placemarks.first.locality}';
+                            woredaController.text =
+                                '${placemarks.first.subLocality}';
+                            kebeleController.text =
+                                '${placemarks.first.street}';
+                            textController.text =
+                                '${placemarks.first.name}, ${placemarks.first.administrativeArea}, ${placemarks.first.country}';
+                          },
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: MediaQuery.of(context).size.height * 0.01,
+                      width: MediaQuery.of(context).size.width - 20,
+                      height: 50,
+                      child: TextFormField(
+                        maxLines: 3,
+                        textAlign: TextAlign.center,
+                        readOnly: true,
+                        decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.zero,
+                            border: InputBorder.none),
+                        controller: textController,
+                      ),
+                    ),
+                    Positioned(
+                      top: MediaQuery.of(context).size.height * 0.3 + 35,
+                      left: MediaQuery.of(context).size.width * 0.305,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: TextButton(
+                              child: const Text(
+                                "Track Location",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.normal,
+                                  color: Colors.black,
+                                  fontSize: 19,
+                                  // height: 19/19,
+                                ),
+                              ),
+                              onPressed: () {
+                                latitudeControler.text =
+                                    '${cameraPosition.target.latitude}';
+                                longitudeController.text =
+                                    '${cameraPosition.target.longitude}';
+                                print(
+                                    "Location ${cameraPosition.target.latitude} ${cameraPosition.target.longitude}");
+                                print("Address: ${textController.text}");
+                              },
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Color.fromARGB(255, 228, 223, 223)),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.05,
+              child: Container(
+                height: MediaQuery.of(context).size.height / 25,
+                width: MediaQuery.of(context).size.width / 3,
+                decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(3)),
+                child: InkWell(
+                  onTap: () async {
+                    bool validated = _trySubmitForm();
+                    if (validated) {
+                      final state = await context
+                          .read<AdminsBloc>()
+                          .registerAdmin(CreateNewAdminEvent(
+                              firstname: firstnameController.text,
+                              lastname: lastnameController.text,
+                              email: emailController.text,
+                              phone: phoneControler.text,
+                              kebele: kebeleController.text,
+                              city: cityControler.text,
+                              woreda: woredaController.text,
+                              zone: zoneController.text,
+                              region: regionController.text,
+                              unique_address: uniqueAddressController.text,
+                              latitude: cameraPosition.target.latitude,
+                              longitude: cameraPosition.target.latitude));
+                      if (state is NewAdminCreatedState) {
+                        context.read<AdminsBloc>().add(GetAllAdminsEvent());
+                        Navigator.pop(context);
+                      }
+                      if (state is FailedToCreateAdminState) {
+                        context.read<AdminsBloc>().add(FailedToCreateAdminEvent(
+                            msg: "Failed to register the user"));
+                        Navigator.pop(context);
+                      }
+                    }
+                  },
+                  child: Center(
+                    child: Text(
+                      "Register",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -158,7 +318,13 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
         Container(
           height: MediaQuery.of(context).size.height / 20,
           width: MediaQuery.of(context).size.width / 2 - 20,
-          child: TextField(
+          child: TextFormField(
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Please enter your first name';
+              }
+              return null;
+            },
             cursorColor: Theme.of(context).primaryColorLight,
             controller: firstnameController,
             decoration: InputDecoration(
@@ -178,7 +344,13 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
         Container(
           height: MediaQuery.of(context).size.height / 20,
           width: MediaQuery.of(context).size.width / 2 - 20,
-          child: TextField(
+          child: TextFormField(
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Please enter last name';
+              }
+              return null;
+            },
             cursorColor: Theme.of(context).primaryColorLight,
             controller: lastnameController,
             decoration: InputDecoration(
@@ -359,21 +531,28 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
     );
   }
 
-  Widget latLon(BuildContext context) {
+  Widget LatLon(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         Container(
           height: MediaQuery.of(context).size.height / 20,
           width: MediaQuery.of(context).size.width / 2 - 20,
-          child: TextField(
+          child: TextFormField(
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Please enter latitude value';
+              }
+
+              return null;
+            },
             cursorColor: Theme.of(context).primaryColorLight,
             controller: latitudeControler,
             decoration: InputDecoration(
+              contentPadding: EdgeInsets.zero,
               labelText: "Latitude",
               fillColor: Colors.lightBlue,
               hoverColor: Colors.lightBlue,
-              suffixIcon: Icon(Icons.location_pin),
               border: OutlineInputBorder(
                 borderSide: BorderSide(
                   color: Colors.lightBlue,
@@ -386,14 +565,20 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
         Container(
           height: MediaQuery.of(context).size.height / 20,
           width: MediaQuery.of(context).size.width / 2 - 20,
-          child: TextField(
+          child: TextFormField(
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Please enter latitude value';
+              }
+              return null;
+            },
             cursorColor: Theme.of(context).primaryColorLight,
             controller: longitudeController,
             decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(left: 2),
               labelText: "Longitude",
               fillColor: Colors.lightBlue,
               hoverColor: Colors.lightBlue,
-              suffixIcon: Icon(Icons.location_pin),
               border: OutlineInputBorder(
                 borderSide: BorderSide(
                   color: Colors.lightBlue,
@@ -405,5 +590,21 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
         ),
       ],
     );
+  }
+
+  bool _trySubmitForm() {
+    final bool? isValid = _formKey.currentState?.validate();
+    return isValid!;
+    // if (isValid == true) {
+    //   debugPrint('Everything looks good!');
+    //   debugPrint(emailController.text);
+    //   debugPrint(firstnameController.text);
+    //   debugPrint(lastnameController.text);
+
+    //   /*
+    //   Continute proccessing the provided information with your own logic
+    //   such us sending HTTP requests, savaing to SQLite database, etc.
+    //   */
+    // }
   }
 }

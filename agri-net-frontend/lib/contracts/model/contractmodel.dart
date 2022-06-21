@@ -1,7 +1,7 @@
 import 'package:agri_net_frontend/products/products.dart';
 
 class Contract {
-  Product product;
+  // Product product;
   double distance;
   double quantity;
   DateTime expiryDate;
@@ -9,7 +9,8 @@ class Contract {
   int buyyerID;
 
   Contract(
-      {required this.product,
+      {
+      // required this.product,
       required this.distance,
       required this.quantity,
       required this.expiryDate,
@@ -18,7 +19,7 @@ class Contract {
 
   Contract fromJson(json) {
     return Contract(
-        product: json['product'],
+        // product: json['product'],
         distance: json["distance"],
         quantity: json["quantity"],
         expiryDate: json["expiryDate"],
@@ -28,7 +29,7 @@ class Contract {
 
   Map<String, dynamic> toJson(Contract c) {
     return {
-      "product": c.product,
+      // "product": c.product,
       "distance": c.distance,
       "quantity": c.quantity,
       "expirydate": c.expiryDate,

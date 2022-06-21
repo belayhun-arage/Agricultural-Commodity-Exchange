@@ -1,22 +1,25 @@
-import '../../libs.dart';
 
-class UserEvent {}
+import "../../libs.dart";
+class UsersEvent {}
 
-class UserLoggedInItEvent extends UserEvent {}
-
-class UserLoggedInEvent extends UserEvent {
-  User user;
-  UserLoggedInEvent({required this.user});
+class LoadUserByIDEvent extends UsersEvent {
+  int id;
+  LoadUserByIDEvent(this.id);
 }
 
-class SomethingWentWrongEvent extends UserEvent {}
 
-class AllProductsEvent extends UserEvent {}
+class LoadMerchantByStoreIDEvent extends UsersEvent {
+  int storeID;
+  LoadMerchantByStoreIDEvent(this.storeID);
+} 
 
-class UserProductsEvent extends UserEvent {}
+class AddUserInstanceEvent extends UsersEvent {
+  User user;
+  int? storeID;
+  AddUserInstanceEvent(this.user , {this.storeID});
+}
 
-class UserProfileEvent extends UserEvent {}
-
-class UserNotificationEvent extends UserEvent {}
-
-class UserLoggOutEvent extends UserEvent {}
+class AddUsersEvent extends UsersEvent {
+  List<User> users;
+  AddUsersEvent(this.users);
+}

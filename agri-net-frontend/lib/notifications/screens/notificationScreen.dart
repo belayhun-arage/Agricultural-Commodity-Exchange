@@ -1,149 +1,245 @@
-// import '../../libs.dart';
+import "../../libs.dart";
 
-// class NotificationScreen extends StatefulWidget {
-//   static String RouteName = "notifications";
-//   const NotificationScreen({Key? key}) : super(key: key);
+class NotificationsScreen extends StatefulWidget {
+  static const RouteName = "/notification/routes";
+  const NotificationsScreen({Key? key}) : super(key: key);
 
-//   @override
-//   State<NotificationScreen> createState() => _NotificationScreenState();
-// }
+  @override
+  State<NotificationsScreen> createState() => _NotificationsScreenState();
+}
 
-// class _NotificationScreenState extends State<NotificationScreen> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         backgroundColor: Theme.of(context).canvasColor,
-//         elevation: 5,
-//         toolbarHeight: MediaQuery.of(context).size.height / 13,
-//         leading: IconButton(
-//             color: Colors.black,
-//             onPressed: () {
-//               Navigator.pop(context);
-//             },
-//             icon: BackButton()),
-//         title: Text(
-//           "Notifications",
-//           style: TextStyle(
-//               fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
-//         ),
-//       ),
-//       body: Center(
-//         child: Flexible(
-//             child: ListView.builder(
-//                 itemCount: notifications.length,
-//                 itemBuilder: (context, counter) {
-//                   return Padding(
-//                     padding: const EdgeInsets.fromLTRB(15, 3, 15, 3),
-//                     child: NotificationCard(notifications[counter]),
-//                   );
-//                 })),
-//       ),
-//     );
-//   }
+class _NotificationsScreenState extends State<NotificationsScreen> {
+  int selectedIndex = 0;
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: SingleChildScrollView(
 
-//   Widget NotificationCard(ProductNotification pnf) {
-//     return Material(
-//       elevation: 5,
-//       child: Container(
-//         width: MediaQuery.of(context).size.width - 20,
-//         height: MediaQuery.of(context).size.height / 5 + 50,
-//         child: Padding(
-//           padding: const EdgeInsets.all(10.0),
-//           child: Column(
-//             children: [
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                 children: [
-//                   Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                     children: [
-//                       ClipOval(
-//                         child: CircleAvatar(
-//                           child: ClipOval(
-//                             child: Image.asset(
-//                               pnf.poster.imgurl,
-//                               width: MediaQuery.of(context).size.width / 2,
-//                               height: MediaQuery.of(context).size.height * 0.2,
-//                               fit: BoxFit.cover,
-//                             ),
-//                           ),
-//                         ),
-//                       ),
-//                       Text(
-//                         "Posted Now",
-//                         style: TextStyle(fontWeight: FontWeight.bold),
-//                       )
-//                     ],
-//                   ),
-//                   Column(
-//                     children: [
-//                       Row(
-//                         children: [
-//                           Column(
-//                             crossAxisAlignment: CrossAxisAlignment.start,
-//                             children: [
-//                               Text("Location : " + pnf.location.toString(),
-//                                   style:
-//                                       TextStyle(fontWeight: FontWeight.bold)),
-//                               Text("Distance : " + pnf.distance.toString(),
-//                                   style:
-//                                       TextStyle(fontWeight: FontWeight.bold)),
-//                             ],
-//                           ),
-//                         ],
-//                       ),
-//                     ],
-//                   ),
-//                   Row(
-//                     children: [
-//                       Icon(Icons.cancel),
-//                     ],
-//                   )
-//                 ],
-//               ),
-//               Container(
-//                 // height: MediaQuery.of(context).size.height / 5,
-//                 child: Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     Text(
-//                         pnf.poster.firstname +
-//                             " Post A New Product You May Like",
-//                         style: TextStyle(
-//                             fontSize: 17, fontWeight: FontWeight.bold)),
-//                     Text(
-//                         pnf.poster.firstname +
-//                             " is our user who sold products recently",
-//                         style: TextStyle(fontWeight: FontWeight.bold)),
-//                     Row(
-//                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                       children: [
-//                         Flexible(
-//                           child: Image.asset(
-//                             pnf.poster.imgurl,
-//                             height: MediaQuery.of(context).size.height / 8 - 10,
-//                           ),
-//                         ),
-//                         Row(
-//                           mainAxisAlignment: MainAxisAlignment.end,
-//                           crossAxisAlignment: CrossAxisAlignment.center,
-//                           children: [
-//                             Text(
-//                               "More",
-//                             ),
-//                             Icon(Icons.more_horiz_outlined)
-//                           ],
-//                         )
-//                       ],
-//                     )
-//                   ],
-//                 ),
-//               )
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+          // height: 100,
+          // width: 100,
+          // color: Theme.of(context).primaryColor,
+          child: Column(children: [
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(
+              20,
+            ),
+            color: Theme.of(context).primaryColor,
+          ),
+          padding: EdgeInsets.symmetric(
+            horizontal: 5,
+            vertical: 10,
+          ),
+          margin: EdgeInsets.only(
+            left: 40,
+            top: 0,
+            bottom: 0,
+          ),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedIndex = 0;
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 5,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                        20,
+                      ),
+                      color: selectedIndex == 0
+                          ? Colors.white
+                          : Theme.of(context).primaryColor,
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          translate(lang, " My Transactions "),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic,
+                              color: selectedIndex == 0
+                                  ? Theme.of(context).primaryColor
+                                  : Colors.white),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(
+                          Icons.transfer_within_a_station_rounded,
+                          color: selectedIndex == 0
+                              ? Theme.of(context).primaryColor
+                              : Colors.white,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  child: Text(
+                    " | ",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedIndex = 1;
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 5,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                        20,
+                      ),
+                      color: selectedIndex == 1
+                          ? Colors.white
+                          : Theme.of(context).primaryColor,
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          translate(lang, " Transactions "),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic,
+                              color: selectedIndex == 1
+                                  ? Theme.of(context).primaryColor
+                                  : Colors.white),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(
+                          Icons.translate,
+                          color: selectedIndex == 1
+                              ? Theme.of(context).primaryColor
+                              : Colors.white,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  child: Text(
+                    " | ",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedIndex = 2;
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 5,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                        20,
+                      ),
+                      color: selectedIndex == 2
+                          ? Colors.white
+                          : Theme.of(context).primaryColor,
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          translate(lang, " Kebd "),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic,
+                              color: selectedIndex == 2
+                                  ? Theme.of(context).primaryColor
+                                  : Colors.white),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(
+                          Icons.transfer_within_a_station_rounded,
+                          color: selectedIndex == 2
+                              ? Theme.of(context).primaryColor
+                              : Colors.white,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  child: Text(
+                    " | ",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedIndex = 3;
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 5,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                        20,
+                      ),
+                      color: selectedIndex == 3
+                          ? Colors.white
+                          : Theme.of(context).primaryColor,
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          translate(lang, " Guarantee "),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic,
+                              color: selectedIndex == 3
+                                  ? Theme.of(context).primaryColor
+                                  : Colors.white),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(
+                          Icons.transfer_within_a_station_rounded,
+                          color: selectedIndex == 3
+                              ? Theme.of(context).primaryColor
+                              : Colors.white,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        // ---------------------------------------
+
+        selectedIndex == 0 ? TransactionsList() : SizedBox()
+      ])),
+    );
+  }
+}

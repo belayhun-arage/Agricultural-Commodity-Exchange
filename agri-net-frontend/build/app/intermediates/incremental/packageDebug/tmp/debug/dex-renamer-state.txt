@@ -1,4 +1,4 @@
-#Mon May 23 21:24:21 EAT 2022
+#Mon Jun 20 10:31:40 EAT 2022
 base.0=/home/belay/go/src/github.com/belayhun-arage/agri-net/agri_net_frontend/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
 renamed.0=classes.dex
 path.0=classes.dex

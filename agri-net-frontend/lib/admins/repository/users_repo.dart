@@ -1,25 +1,22 @@
-import 'package:agri_net_frontend/admins/model/models.dart';
-import 'package:agri_net_frontend/admins/admins.dart';
-
 import '../../libs.dart';
 
 class AdminsRepo {
-  AdminsProvider adminsProvider;
+  UserProvider adminsProvider;
   AdminsRepo({required this.adminsProvider});
 
-  Future<List<User>> getAdmins() {
+  Future<List<Admin>> getAdmins() {
     return adminsProvider.getAdmins();
   }
 
-  Future<List<Merchant>> getMerchants() {
-    return adminsProvider.getMerchants();
+  Future<List<Merchant>> getMerchants(Admin admin) {
+    return adminsProvider.getMerchants(admin);
   }
 
-  Future<List<Agent>> getAgents() {
-    return adminsProvider.getAgents();
+  Future<List<Agent>> getAgents(int id) {
+    return adminsProvider.getAgents(id);
   }
 
-  Future<AdminRegisterResponse> createNewAdmin(
+  Future<UserRegisterResponse> creatNewMerchant(
     String firstname,
     String lastname,
     String email,
@@ -27,7 +24,65 @@ class AdminsRepo {
     String kebele,
     String woreda,
     String city,
-    String unique_address,
+    String uniqueAddress,
+    String region,
+    String zone,
+    double latitude,
+    double longitude,
+  ) async {
+    return await adminsProvider.createNewMerchant(
+        firstname,
+        lastname,
+        email,
+        phone,
+        kebele,
+        woreda,
+        city,
+        uniqueAddress,
+        region,
+        zone,
+        latitude,
+        longitude);
+  }
+
+  Future<UserRegisterResponse> creatNewAgent(
+    String firstname,
+    String lastname,
+    String email,
+    String phone,
+    String kebele,
+    String woreda,
+    String city,
+    String uniqueAddress,
+    String region,
+    String zone,
+    double latitude,
+    double longitude,
+  ) async {
+    return await adminsProvider.createNewAgent(
+        firstname,
+        lastname,
+        email,
+        phone,
+        kebele,
+        woreda,
+        city,
+        uniqueAddress,
+        region,
+        zone,
+        latitude,
+        longitude);
+  }
+
+  Future<UserRegisterResponse> createNewAdmin(
+    String firstname,
+    String lastname,
+    String email,
+    String phone,
+    String kebele,
+    String woreda,
+    String city,
+    String uniqueAddress,
     String region,
     String zone,
     double latitude,
@@ -41,7 +96,7 @@ class AdminsRepo {
       kebele,
       woreda,
       city,
-      unique_address,
+      uniqueAddress,
       region,
       zone,
       latitude,

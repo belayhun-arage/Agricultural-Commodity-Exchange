@@ -1,28 +1,28 @@
 import "../../libs.dart";
 
-class AuthBlocState {}
+class UserState {}
 
-class AuthStateInit extends AuthBlocState {}
+class UserStateInit extends UserState {}
 
-class AuthAdminLoggedIn extends AuthBlocState {
+class Authenticated extends UserState {
   User user;
   String role;
-  AuthAdminLoggedIn(this.user, this.role);
+  Authenticated({required this.user, required this.role});
 }
 
-class AuthAdminLoginNotSuccesful extends AuthBlocState {
+class NotAuthenticated extends UserState {
   String Msg;
-  AuthAdminLoginNotSuccesful(this.Msg);
+  NotAuthenticated(this.Msg);
 }
 
-class AuthAdminLoginOnProgress extends AuthBlocState {}
+class UserLoginOnProgressState extends UserState {}
 
 // AuthForgotPasswordInProgress ....
-class AuthForgotPasswordInProgress extends AuthBlocState {}
+class UserForgotPasswordInProgressState extends UserState {}
 
-class AuthPasswordSentLoginAndChangePassword extends AuthBlocState {}
+class UserPasswordSentLoginAndChangePasswordState extends UserState {}
 
-class AuthForgotPasswordRequestFailed extends AuthBlocState {
+class AuthForgotPasswordRequestFailed extends UserState {
   String message;
   AuthForgotPasswordRequestFailed(this.message);
 }

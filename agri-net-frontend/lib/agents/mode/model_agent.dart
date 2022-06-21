@@ -1,21 +1,22 @@
 import '../../libs.dart';
 
-class Agent {
-  User user;
+class Agent extends User {
   int storeCount;
   int postsCounte;
   int reg_by;
   Agent(
-      {required this.user,
-      required this.storeCount,
-      required this.postsCounte,
-      required this.reg_by});
+      Map<String, dynamic> json, this.storeCount, this.postsCounte, this.reg_by)
+      : super(
+            id: json["id"],
+            firstname: json["firstname"],
+            lastname: json["lastname"],
+            email: json["email"],
+            phone: json["phone"],
+            imgurl: json["imgUrl"],
+            lang: json["lang"]);
 
   factory Agent.fromJson(json) {
-    return Agent(
-        user: json["user"],
-        storeCount: json["store_count"],
-        postsCounte: json["Posts_count"],
-        reg_by: json["reg_by"]);
+    return Agent(json, json["store_count"] ?? 0, json["Posts_count"] ?? 0,
+        json["reg_by"] ?? 7);
   }
 }

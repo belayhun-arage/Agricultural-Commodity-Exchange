@@ -1,23 +1,15 @@
-import 'package:agri_net_frontend/auth/model/modelUser.dart';
+import "../../libs.dart";
 
-class UserState {}
+class UsersState {}
 
-class UserLoggedInItState extends UserState {}
-
-class UserLoggedInState extends UserState {
-  User user;
-  UserLoggedInState({required this.user});
+class UsersLoadedState extends UsersState {
+  Map<int, User> users;
+  Map<int, Merchant> merchants = {};
+  UsersLoadedState(this.users, {required this.merchants});
 }
 
-class AllProductsState extends UserState {}
+class UsersLoadFailedState extends UsersState {}
 
-class UserProductsState extends UserState {}
+class UsersInit extends UsersState {}
 
-class UserProfileState extends UserState {}
-
-class UserNotificationState extends UserState {}
-
-
-class UserWithNoRoleState extends UserState {}
-
-class SomethingWentWrongState extends UserState {}
+class UsersLoading extends UsersState {}
