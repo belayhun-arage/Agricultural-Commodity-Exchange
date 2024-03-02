@@ -1,4 +1,3 @@
-Agricultural-Commodity-Exchange
 ![photo_2022-06-17_11-52-39](https://github.com/belayhun-arage/Agricultural-Commodity-Exchange/assets/87091916/825da53a-b041-4c1e-97e1-720e8f059bbe)
 ![photo_2022-06-17_11-50-26](https://github.com/belayhun-arage/Agricultural-Commodity-Exchange/assets/87091916/5b73bf1d-ba0e-4d77-955f-fdfdc89e5393)
 ![photo_2022-06-17_11-51-26](https://github.com/belayhun-arage/Agricultural-Commodity-Exchange/assets/87091916/e0481cb2-36d6-43a9-bb6f-f205e0bdc4b5)
